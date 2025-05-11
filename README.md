@@ -44,7 +44,7 @@ Este proyecto implementa un Sistema Experto Difuso (SED) utilizando la librería
 3. Instale todas las dependencias necesarias:
 
    ```bash
-   pip install numpy scipy networkx scikit-fuzzy matplotlib
+   pip install -r requirements.txt
    ```
 
 ## Uso
