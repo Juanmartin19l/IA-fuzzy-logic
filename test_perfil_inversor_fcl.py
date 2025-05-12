@@ -6,19 +6,24 @@ Test del Sistema Experto Difuso para perfiles de inversores (versión FCL)
 Este script ejecuta pruebas predefinidas para verificar los diferentes perfiles de inversores
 basado en la implementación Python del archivo FCL.
 
-Tests realizados:
-1. Perfil Conservador Típico: Persona mayor con bajos ingresos, baja tolerancia al riesgo y bajo conocimiento
-2. Perfil Moderado Típico: Persona adulta con ingresos medios, tolerancia al riesgo media y conocimiento medio
-3. Perfil Agresivo Típico: Persona joven con altos ingresos, alta tolerancia al riesgo y alto conocimiento
-4. Caso Límite Conservador-Moderado: Verificación de valores en el límite entre perfiles
+Tests realizados (ordenados por edad de menor a mayor):
+1. Joven Emprendedor: Persona muy joven con ingresos medios-bajos, alto conocimiento y alta tolerancia al riesgo
+2. Perfil Agresivo Típico: Persona joven con altos ingresos, alta tolerancia al riesgo y alto conocimiento
+3. Joven Conservador: Persona joven con buenos ingresos pero perfil conservador por baja tolerancia
+4. Alto Potencial y Bajo Riesgo: Persona joven con altos ingresos y conocimiento pero baja tolerancia
 5. Caso Límite Moderado-Agresivo: Verificación de valores en el límite entre perfiles
-6. Alto Potencial y Bajo Riesgo: Casos donde el potencial y riesgo no correlacionan
-7. Bajo Potencial y Alto Riesgo: Casos donde el potencial y riesgo no correlacionan
+6. Adulto Digital: Persona de mediana edad con alto conocimiento tecnológico y financiero
+7. Perfil Moderado Típico: Persona adulta con ingresos medios, tolerancia al riesgo media y conocimiento medio
+8. Adulto Diversificador: Persona adulta con ingresos altos y moderada tolerancia
+9. Caso Límite Conservador-Moderado: Verificación de valores en el límite entre perfiles
+10. Adulto Pre-Jubilación: Persona cerca de jubilarse con buenos ahorros e ingresos
+11. Bajo Potencial y Alto Riesgo: Persona mayor con bajos ingresos pero alta tolerancia al riesgo
+12. Perfil Conservador Típico: Persona mayor con bajos ingresos, baja tolerancia al riesgo y bajo conocimiento
+13. Senior Inversionista: Persona mayor con altos ingresos y alto conocimiento financiero
 """
 
 import sys
 import os
-import matplotlib.pyplot as plt
 from perfil_inversor import SistemaExpertoDifusoInversorFCL
 
 
@@ -40,7 +45,7 @@ def imprimir_resultado(nombre_test, datos, resultado):
     print("=" * 70)
 
 
-def ejecutar_tests(mostrar_graficas=False):
+def ejecutar_tests():
     """
     Ejecuta una serie de tests predefinidos para diferentes perfiles de inversores
 
@@ -73,14 +78,14 @@ def ejecutar_tests(mostrar_graficas=False):
     # Almacenar resultados para gráfica
     resultados = []
 
-    # TEST 1: Perfil Conservador Típico
-    datos_test1 = {"edad": 70, "ingresos": 1000, "conocimiento": 2, "tolerancia": 2}
+    # TEST 1: Joven Emprendedor
+    datos_test1 = {"edad": 21, "ingresos": 2000, "conocimiento": 7, "tolerancia": 8}
     try:
         resultado1 = sed.evaluar(**datos_test1)
-        imprimir_resultado("PERFIL CONSERVADOR TÍPICO", datos_test1, resultado1)
+        imprimir_resultado("JOVEN EMPRENDEDOR", datos_test1, resultado1)
         resultados.append(
             {
-                "nombre": "Conservador Típico",
+                "nombre": "Joven Emprendedor",
                 "datos": datos_test1,
                 "resultado": resultado1,
             }
@@ -88,35 +93,43 @@ def ejecutar_tests(mostrar_graficas=False):
     except Exception as e:
         print(f"Error en test 1: {e}")
 
-    # TEST 2: Perfil Moderado Típico
-    datos_test2 = {"edad": 45, "ingresos": 3000, "conocimiento": 5, "tolerancia": 5}
+    # TEST 2: Perfil Agresivo Típico
+    datos_test2 = {"edad": 25, "ingresos": 6000, "conocimiento": 8, "tolerancia": 9}
     try:
         resultado2 = sed.evaluar(**datos_test2)
-        imprimir_resultado("PERFIL MODERADO TÍPICO", datos_test2, resultado2)
+        imprimir_resultado("PERFIL AGRESIVO TÍPICO", datos_test2, resultado2)
         resultados.append(
-            {"nombre": "Moderado Típico", "datos": datos_test2, "resultado": resultado2}
+            {"nombre": "Agresivo Típico", "datos": datos_test2, "resultado": resultado2}
         )
     except Exception as e:
         print(f"Error en test 2: {e}")
 
-    # TEST 3: Perfil Agresivo Típico
-    datos_test3 = {"edad": 25, "ingresos": 6000, "conocimiento": 8, "tolerancia": 9}
+    # TEST 3: Joven Conservador
+    datos_test3 = {"edad": 28, "ingresos": 5000, "conocimiento": 6, "tolerancia": 3}
     try:
         resultado3 = sed.evaluar(**datos_test3)
-        imprimir_resultado("PERFIL AGRESIVO TÍPICO", datos_test3, resultado3)
+        imprimir_resultado("JOVEN CONSERVADOR", datos_test3, resultado3)
         resultados.append(
-            {"nombre": "Agresivo Típico", "datos": datos_test3, "resultado": resultado3}
+            {
+                "nombre": "Joven Conservador",
+                "datos": datos_test3,
+                "resultado": resultado3,
+            }
         )
     except Exception as e:
         print(f"Error en test 3: {e}")
 
-    # TEST 4: Caso Límite Conservador-Moderado
-    datos_test4 = {"edad": 55, "ingresos": 2500, "conocimiento": 4, "tolerancia": 3}
+    # TEST 4: Alto Potencial y Bajo Riesgo
+    datos_test4 = {"edad": 30, "ingresos": 8000, "conocimiento": 9, "tolerancia": 2}
     try:
         resultado4 = sed.evaluar(**datos_test4)
-        imprimir_resultado("CASO LÍMITE CONSERVADOR-MODERADO", datos_test4, resultado4)
+        imprimir_resultado("ALTO POTENCIAL Y BAJO RIESGO", datos_test4, resultado4)
         resultados.append(
-            {"nombre": "Límite Cons-Mod", "datos": datos_test4, "resultado": resultado4}
+            {
+                "nombre": "Alto Pot, Bajo Riesgo",
+                "datos": datos_test4,
+                "resultado": resultado4,
+            }
         )
     except Exception as e:
         print(f"Error en test 4: {e}")
@@ -132,14 +145,14 @@ def ejecutar_tests(mostrar_graficas=False):
     except Exception as e:
         print(f"Error en test 5: {e}")
 
-    # TEST 6: Alto Potencial y Bajo Riesgo
-    datos_test6 = {"edad": 30, "ingresos": 8000, "conocimiento": 9, "tolerancia": 2}
+    # TEST 6: Adulto Digital
+    datos_test6 = {"edad": 40, "ingresos": 7000, "conocimiento": 9, "tolerancia": 8}
     try:
         resultado6 = sed.evaluar(**datos_test6)
-        imprimir_resultado("ALTO POTENCIAL Y BAJO RIESGO", datos_test6, resultado6)
+        imprimir_resultado("ADULTO DIGITAL", datos_test6, resultado6)
         resultados.append(
             {
-                "nombre": "Alto Pot, Bajo Riesgo",
+                "nombre": "Adulto Digital",
                 "datos": datos_test6,
                 "resultado": resultado6,
             }
@@ -147,135 +160,103 @@ def ejecutar_tests(mostrar_graficas=False):
     except Exception as e:
         print(f"Error en test 6: {e}")
 
-    # TEST 7: Bajo Potencial y Alto Riesgo
-    datos_test7 = {"edad": 65, "ingresos": 1500, "conocimiento": 3, "tolerancia": 9}
+    # TEST 7: Perfil Moderado Típico
+    datos_test7 = {"edad": 45, "ingresos": 3000, "conocimiento": 5, "tolerancia": 5}
     try:
         resultado7 = sed.evaluar(**datos_test7)
-        imprimir_resultado("BAJO POTENCIAL Y ALTO RIESGO", datos_test7, resultado7)
+        imprimir_resultado("PERFIL MODERADO TÍPICO", datos_test7, resultado7)
         resultados.append(
-            {
-                "nombre": "Bajo Pot, Alto Riesgo",
-                "datos": datos_test7,
-                "resultado": resultado7,
-            }
+            {"nombre": "Moderado Típico", "datos": datos_test7, "resultado": resultado7}
         )
     except Exception as e:
         print(f"Error en test 7: {e}")
 
-    # Mostrar gráficas de resultados si se solicita
-    if mostrar_graficas and resultados:
-        visualizar_comparacion(resultados)
-
-
-def visualizar_comparacion(resultados):
-    """
-    Visualiza una comparación gráfica de los resultados de los tests
-
-    Args:
-        resultados (list): Lista de resultados de los tests
-    """
-    # Extraer datos para gráficas
-    nombres = [r["nombre"] for r in resultados]
-    perfiles = [r["resultado"]["valor_perfil"] for r in resultados]
-    potenciales = [r["resultado"]["potencial"] for r in resultados]
-    riesgos = [r["resultado"]["riesgo"] for r in resultados]
-
-    # Crear figura con 3 subplots
-    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, figsize=(12, 15))
-
-    # Gráfica 1: Valor del Perfil
-    bars1 = ax1.bar(nombres, perfiles, color="darkblue", alpha=0.7)
-    ax1.set_title("Comparación de Perfiles de Inversión", fontsize=14)
-    ax1.set_ylabel("Valor del Perfil (0-3)")
-    ax1.set_ylim(0, 3)
-    ax1.axhline(
-        y=1.0, color="r", linestyle="--", alpha=0.5
-    )  # Línea para el límite Conservador-Moderado
-    ax1.axhline(
-        y=2.0, color="r", linestyle="--", alpha=0.5
-    )  # Línea para el límite Moderado-Agresivo
-    ax1.text(
-        ax1.get_xlim()[1], 0.5, "Conservador", ha="right", va="center", color="darkred"
-    )
-    ax1.text(
-        ax1.get_xlim()[1], 1.5, "Moderado", ha="right", va="center", color="darkred"
-    )
-    ax1.text(
-        ax1.get_xlim()[1], 2.5, "Agresivo", ha="right", va="center", color="darkred"
-    )
-
-    # Rotar etiquetas del eje x para mejor legibilidad
-    plt.setp(ax1.xaxis.get_majorticklabels(), rotation=45, ha="right")
-
-    # Mostrar valores en las barras
-    for bar in bars1:
-        height = bar.get_height()
-        ax1.text(
-            bar.get_x() + bar.get_width() / 2.0,
-            height + 0.1,
-            f"{height:.2f}",
-            ha="center",
-            va="bottom",
+    # TEST 8: Adulto Diversificador
+    datos_test8 = {"edad": 50, "ingresos": 9000, "conocimiento": 7, "tolerancia": 6}
+    try:
+        resultado8 = sed.evaluar(**datos_test8)
+        imprimir_resultado("ADULTO DIVERSIFICADOR", datos_test8, resultado8)
+        resultados.append(
+            {
+                "nombre": "Adulto Diversificador",
+                "datos": datos_test8,
+                "resultado": resultado8,
+            }
         )
+    except Exception as e:
+        print(f"Error en test 8: {e}")
 
-    # Gráfica 2: Potencial de Inversión
-    bars2 = ax2.bar(nombres, potenciales, color="darkgreen", alpha=0.7)
-    ax2.set_title("Comparación de Potencial de Inversión", fontsize=14)
-    ax2.set_ylabel("Potencial (0-10)")
-    ax2.set_ylim(0, 10)
-
-    # Mostrar valores en las barras
-    for bar in bars2:
-        height = bar.get_height()
-        ax2.text(
-            bar.get_x() + bar.get_width() / 2.0,
-            height + 0.2,
-            f"{height:.2f}",
-            ha="center",
-            va="bottom",
+    # TEST 9: Caso Límite Conservador-Moderado
+    datos_test9 = {"edad": 55, "ingresos": 2500, "conocimiento": 4, "tolerancia": 3}
+    try:
+        resultado9 = sed.evaluar(**datos_test9)
+        imprimir_resultado("CASO LÍMITE CONSERVADOR-MODERADO", datos_test9, resultado9)
+        resultados.append(
+            {"nombre": "Límite Cons-Mod", "datos": datos_test9, "resultado": resultado9}
         )
+    except Exception as e:
+        print(f"Error en test 9: {e}")
 
-    # Rotar etiquetas del eje x para mejor legibilidad
-    plt.setp(ax2.xaxis.get_majorticklabels(), rotation=45, ha="right")
-
-    # Gráfica 3: Nivel de Riesgo
-    bars3 = ax3.bar(nombres, riesgos, color="darkred", alpha=0.7)
-    ax3.set_title("Comparación de Nivel de Riesgo", fontsize=14)
-    ax3.set_ylabel("Riesgo (0-10)")
-    ax3.set_ylim(0, 10)
-
-    # Mostrar valores en las barras
-    for bar in bars3:
-        height = bar.get_height()
-        ax3.text(
-            bar.get_x() + bar.get_width() / 2.0,
-            height + 0.2,
-            f"{height:.2f}",
-            ha="center",
-            va="bottom",
+    # TEST 10: Adulto Pre-Jubilación
+    datos_test10 = {"edad": 60, "ingresos": 4000, "conocimiento": 6, "tolerancia": 4}
+    try:
+        resultado10 = sed.evaluar(**datos_test10)
+        imprimir_resultado("ADULTO PRE-JUBILACIÓN", datos_test10, resultado10)
+        resultados.append(
+            {
+                "nombre": "Adulto Pre-Jubilación",
+                "datos": datos_test10,
+                "resultado": resultado10,
+            }
         )
+    except Exception as e:
+        print(f"Error en test 10: {e}")
 
-    # Rotar etiquetas del eje x para mejor legibilidad
-    plt.setp(ax3.xaxis.get_majorticklabels(), rotation=45, ha="right")
+    # TEST 11: Bajo Potencial y Alto Riesgo
+    datos_test11 = {"edad": 65, "ingresos": 1500, "conocimiento": 3, "tolerancia": 9}
+    try:
+        resultado11 = sed.evaluar(**datos_test11)
+        imprimir_resultado("BAJO POTENCIAL Y ALTO RIESGO", datos_test11, resultado11)
+        resultados.append(
+            {
+                "nombre": "Bajo Pot, Alto Riesgo",
+                "datos": datos_test11,
+                "resultado": resultado11,
+            }
+        )
+    except Exception as e:
+        print(f"Error en test 11: {e}")
 
-    # Ajustar layout y mostrar
-    plt.tight_layout()
-    plt.show()
+    # TEST 12: Perfil Conservador Típico
+    datos_test12 = {"edad": 70, "ingresos": 1000, "conocimiento": 2, "tolerancia": 2}
+    try:
+        resultado12 = sed.evaluar(**datos_test12)
+        imprimir_resultado("PERFIL CONSERVADOR TÍPICO", datos_test12, resultado12)
+        resultados.append(
+            {
+                "nombre": "Conservador Típico",
+                "datos": datos_test12,
+                "resultado": resultado12,
+            }
+        )
+    except Exception as e:
+        print(f"Error en test 12: {e}")
+
+    # TEST 13: Senior Inversionista
+    datos_test13 = {"edad": 75, "ingresos": 7500, "conocimiento": 8, "tolerancia": 4}
+    try:
+        resultado13 = sed.evaluar(**datos_test13)
+        imprimir_resultado("SENIOR INVERSIONISTA", datos_test13, resultado13)
+        resultados.append(
+            {
+                "nombre": "Senior Inversionista",
+                "datos": datos_test13,
+                "resultado": resultado13,
+            }
+        )
+    except Exception as e:
+        print(f"Error en test 13: {e}")
 
 
 if __name__ == "__main__":
-    # Determinar si mostrar gráficas basado en argumentos de línea de comandos
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Tests del Sistema Experto Difuso para perfiles de inversores (FCL)"
-    )
-    parser.add_argument(
-        "-g",
-        "--graficas",
-        action="store_true",
-        help="Mostrar gráficas comparativas de los resultados",
-    )
-    args = parser.parse_args()
-
-    ejecutar_tests(mostrar_graficas=args.graficas)
+    ejecutar_tests()
