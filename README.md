@@ -1,47 +1,111 @@
 # Sistema Experto Difuso para Perfiles de Inversión
 
-Este proyecto implementa un Sistema Experto Difuso (SED) utilizando la librería `scikit-fuzzy` para determinar el perfil de un inversor (conservador, moderado o arriesgado) basado en diferentes variables de entrada.
+Este proyecto implementa un Sistema Experto basado en Lógica Difusa (Fuzzy Logic) que determina el perfil de un inversor a partir de características personales como edad, nivel de ingresos, conocimiento financiero y tolerancia al riesgo. El sistema está implementado en Python utilizando la biblioteca scikit-fuzzy.
 
-## Características
+## Descripción
 
-- Evaluación difusa del perfil inversor utilizando el método Mamdani
-- Variables de entrada:
-  - Edad del inversor (joven, medio, mayor)
-  - Nivel de ingresos mensuales (bajo, medio, alto)
-  - Tolerancia al riesgo (baja, media, alta)
-  - Horizonte de inversión (corto, medio, largo plazo)
-- Variable de salida: perfil de inversor (conservador, moderado, arriesgado)
-- Implementación de más de 20 reglas difusas
-- Visualización de funciones de membresía
-- Interfaz de consola para ingresar datos
+El sistema utiliza principios de lógica difusa para modelar el razonamiento humano en la clasificación de inversores. A diferencia de la lógica binaria tradicional (verdadero/falso), la lógica difusa permite el manejo de conceptos imprecisos como "joven", "ingresos altos" o "baja tolerancia al riesgo" mediante grados de pertenencia a conjuntos difusos.
+
+### Características principales
+
+- Evaluación de perfiles de inversión basada en 4 variables de entrada
+- Categorización en 3 perfiles de inversor: Conservador, Moderado y Agresivo
+- Visualización de las funciones de membresía y resultados mediante gráficos
+- Interfaz de usuario por consola, interactiva y amigable
+
+## Funcionamiento técnico
+
+### Variables de entrada
+
+1. **Edad del inversor (18-100 años)**:
+
+   - Joven: 18-35 años (máxima pertenencia entre 18-27)
+   - Adulto: 30-55 años (máxima pertenencia en 42)
+   - Mayor: 50-100 años (máxima pertenencia a partir de 65)
+
+2. **Ingresos mensuales (0-15,000 unidades monetarias)**:
+
+   - Bajo: 0-2,000 (máxima pertenencia entre 0-1,000)
+   - Medio: 1,500-4,500 (máxima pertenencia en 3,000)
+   - Alto: 4,000-15,000 (máxima pertenencia a partir de 6,000)
+
+3. **Conocimiento financiero (escala 0-10)**:
+
+   - Bajo: 0-4 (máxima pertenencia entre 0-2)
+   - Medio: 2-8 (máxima pertenencia entre 4-5)
+   - Alto: 6-10 (máxima pertenencia a partir de 8)
+
+4. **Tolerancia al riesgo (escala 0-10)**:
+   - Baja: 0-4 (máxima pertenencia entre 0-2)
+   - Media: 2-8 (máxima pertenencia entre 4-5)
+   - Alta: 6-10 (máxima pertenencia a partir de 8)
+
+### Variables intermedias
+
+1. **Potencial de inversión (escala 0-10)**:
+
+   - Bajo: 0-4
+   - Medio: 3-8
+   - Alto: 7-10
+
+2. **Nivel de riesgo (escala 0-10)**:
+   - Bajo: 0-4
+   - Medio: 3-8
+   - Alto: 7-10
+
+### Variable de salida
+
+**Perfil de inversor (escala 0-3)**:
+
+- Conservador: 0-1
+- Moderado: 0.5-2.5
+- Agresivo: 2-3
+
+### Modelo de inferencia difusa
+
+El sistema implementa 27 reglas de inferencia distribuidas en tres bloques:
+
+1. **Bloque para calcular el potencial de inversión** (9 reglas)
+
+   - Combina edad e ingresos para determinar el potencial económico del inversor
+   - Ejemplo: "IF edad IS joven AND ingresos IS alto THEN potencial IS alto"
+
+2. **Bloque para calcular el nivel de riesgo** (9 reglas)
+
+   - Combina conocimiento financiero y tolerancia al riesgo
+   - Ejemplo: "IF conocimiento IS alto AND tolerancia IS baja THEN riesgo IS bajo"
+
+3. **Bloque para determinar el perfil final del inversor** (9 reglas)
+   - Combina potencial de inversión y nivel de riesgo
+   - Ejemplo: "IF potencial IS alto AND riesgo IS alto THEN perfil_inversor IS agresivo"
 
 ## Requisitos
 
+Para ejecutar el sistema se necesita:
+
 - Python 3.6 o superior
-- Dependencias:
-  - numpy
-  - scipy
-  - networkx
-  - scikit-fuzzy
-  - matplotlib
+- NumPy
+- scikit-fuzzy
+- Matplotlib
 
 ## Instalación
 
-1. Clone este repositorio o descargue los archivos
-2. **Se recomienda usar un entorno virtual**:
+1. **Clone el repositorio o descargue los archivos del proyecto**
+
+2. **Cree y active un entorno virtual (recomendado)**:
 
    ```bash
-   # Crear un entorno virtual
+   # Crear el entorno virtual
    python -m venv venv
 
-   # Activar el entorno virtual
-   # En Windows:
-   venv\Scripts\activate
-   # En macOS/Linux:
+   # Activar el entorno virtual en macOS/Linux
    source venv/bin/activate
+
+   # Activar el entorno virtual en Windows
+   venv\Scripts\activate.bat
    ```
 
-3. Instale todas las dependencias necesarias:
+3. **Instale las dependencias**:
 
    ```bash
    pip install -r requirements.txt
@@ -49,73 +113,73 @@ Este proyecto implementa un Sistema Experto Difuso (SED) utilizando la librería
 
 ## Uso
 
-### Ejecución del sistema principal
-
-Para usar el sistema interactivo y evaluar perfiles de inversión:
+Para ejecutar el sistema, simplemente ejecute:
 
 ```bash
-python sistema_experto_inversor.py
+python perfil_inversor.py
 ```
 
-Siga las instrucciones en pantalla para ingresar los datos del inversor:
+El programa solicitará los siguientes datos:
 
-- Edad (18-90 años)
-- Ingresos mensuales (0-150,000)
-- Tolerancia al riesgo (0-10)
-- Horizonte de inversión (1-40 años)
+- Edad del inversor (entre 18 y 100 años)
+- Ingresos mensuales (entre 0 y 15,000)
+- Nivel de conocimiento financiero (entre 0 y 10)
+- Tolerancia al riesgo (entre 0 y 10)
 
-### Ejecución de pruebas automáticas
+Después de procesar los datos, el sistema mostrará:
 
-Para ejecutar pruebas con casos predefinidos que cubren diferentes perfiles:
+- El perfil del inversor (Conservador, Moderado o Agresivo)
+- El potencial de inversión calculado (0-10)
+- El nivel de riesgo calculado (0-10)
+- Opción para visualizar gráficamente las funciones de membresía y resultados
 
-```bash
-python test_perfiles_inversor.py
-```
+## Implementación técnica
 
-Este script ejecutará 10 casos de prueba que abarcan perfiles conservadores, moderados y arriesgados, incluyendo casos límite.
+El código está estructurado en una clase principal `SistemaExpertoDifusoInversorFCL` que implementa:
 
-## Reglas del Sistema Experto
+- Definición de variables lingüísticas (Antecedentes y Consecuentes)
+- Configuración de funciones de membresía triangulares (trimf) y trapezoidales (trapmf)
+- Establecimiento de reglas difusas mediante operadores AND (&)
+- Creación del sistema de control difuso y simulación
+- Métodos para evaluar entradas y visualizar resultados
 
-El sistema incluye más de 20 reglas difusas que evalúan todas las combinaciones relevantes de las variables de entrada. Algunas de las reglas más importantes son:
+### Elementos clave del código
 
-1. Si es joven, ingresos altos, tolerancia alta y horizonte largo, entonces perfil arriesgado
-2. Si es mayor, ingresos bajos y tolerancia baja, entonces perfil conservador
-3. Si es medio, ingresos medios y tolerancia media, entonces perfil moderado
+- **Inicialización**: Define los universos de discurso para cada variable.
+- **Funciones de membresía**: Implementa las funciones de pertenencia usando trimf y trapmf.
+- **Reglas difusas**: Crea 27 reglas usando el operador AND (&) entre condiciones.
+- **Evaluación**: Método que valida entradas, ejecuta la inferencia difusa y devuelve los resultados.
+- **Visualización**: Métodos para mostrar gráficamente las funciones de membresía y resultados.
 
-## Ejemplo de uso
+### Manejo de errores
 
-```
-========================================================
-   SISTEMA EXPERTO DIFUSO PARA PERFILES DE INVERSIÓN
-========================================================
+El sistema implementa un mecanismo robusto de manejo de errores:
 
-Ingrese los datos del inversor (o 'salir' para terminar):
+- Validación de rango para todas las variables de entrada
+- Manejo de errores durante la inferencia difusa con mecanismo de reglas por defecto
+- Tratamiento de excepciones durante la visualización
 
-- Edad (18-90 años): 35
-- Ingresos mensuales (0-150,000): 70000
-- Tolerancia al riesgo (0-10): 7
-- Horizonte de inversión (1-40 años): 15
+## Ejemplos de perfiles
 
-------------------------------------------------------------
-Resultado del análisis para el inversor:
-------------------------------------------------------------
-Edad: 35 años
-Ingresos mensuales: $70000
-Tolerancia al riesgo: 7/10
-Horizonte de inversión: 15 años
-------------------------------------------------------------
-Perfil del inversor: Moderado
-Valor numérico: 55.63/100
-```
+1. **Perfil Conservador**:
 
-## Personalización
+   - Personas mayores con ingresos bajos/medios
+   - Personas con bajo potencial de inversión independientemente del riesgo
 
-Para modificar o ampliar las reglas del sistema, edite el método `definir_reglas()` en la clase `SistemaExpertoDifusoInversor`. Puede agregar nuevas reglas siguiendo el formato existente.
+2. **Perfil Moderado**:
 
-## Manejo de errores
+   - Personas con potencial medio y riesgo bajo/medio
+   - Adultos con ingresos medios y conocimiento financiero medio
 
-El sistema incluye un mecanismo de respaldo para manejar casos donde la inferencia difusa podría fallar, asegurando que siempre se obtenga un perfil de inversor válido.
+3. **Perfil Agresivo**:
+   - Jóvenes con altos ingresos y alta tolerancia al riesgo
+   - Personas con alto potencial de inversión
+   - Personas con potencial medio pero alto nivel de riesgo
+
+## Referencias
+
+El sistema está basado en el estándar FCL (Fuzzy Control Language) y utiliza conceptos de la teoría de conjuntos difusos desarrollada por Lotfi Zadeh.
 
 ## Licencia
 
-Este proyecto es de uso libre para fines educativos y académicos.
+Este proyecto está disponible como software de código abierto.
