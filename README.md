@@ -83,7 +83,7 @@ El sistema implementa 27 reglas de inferencia distribuidas en tres bloques:
 
 Para ejecutar el sistema se necesita:
 
-- Python 3.6 o superior
+- Python 3.10 o superior
 - NumPy
 - scikit-fuzzy
 - Matplotlib
@@ -97,12 +97,17 @@ Para ejecutar el sistema se necesita:
    ```bash
    # Crear el entorno virtual
    python -m venv venv
+   ```
 
+   ```bash
    # Activar el entorno virtual en macOS/Linux
    source venv/bin/activate
+   ```
 
+   ```bash
    # Activar el entorno virtual en Windows
-   venv\Scripts\activate.bat
+   .\venv\Scripts\activate
+
    ```
 
 3. **Instale las dependencias**:

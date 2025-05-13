@@ -477,14 +477,14 @@ def ejecutar_sistema():
         while True:
             try:
                 print("\nIngrese los datos del inversor (o 'salir' para terminar):")
-                
+
                 # Validación de edad
                 while True:
                     entrada = input("\n- Edad (19-100 años): ")
-                    
+
                     if entrada.lower() in ["salir", "exit", "q"]:
                         break
-                        
+
                     try:
                         edad = int(entrada)
                         if 19 <= edad <= 100:
@@ -493,10 +493,10 @@ def ejecutar_sistema():
                             print("Error: La edad debe estar entre 19 y 100 años.")
                     except ValueError:
                         print("Error: Por favor, ingrese un número entero válido.")
-                
+
                 if entrada.lower() in ["salir", "exit", "q"]:
                     break
-                    
+
                 # Validación de ingresos
                 while True:
                     try:
@@ -508,7 +508,7 @@ def ejecutar_sistema():
                             print("Error: Los ingresos deben estar entre 1 y 15,000.")
                     except ValueError:
                         print("Error: Por favor, ingrese un número entero válido.")
-                
+
                 # Validación de conocimiento financiero
                 while True:
                     try:
@@ -517,10 +517,12 @@ def ejecutar_sistema():
                         if 1 <= conocimiento <= 10:
                             break
                         else:
-                            print("Error: El nivel de conocimiento debe estar entre 1 y 10.")
+                            print(
+                                "Error: El nivel de conocimiento debe estar entre 1 y 10."
+                            )
                     except ValueError:
                         print("Error: Por favor, ingrese un número válido.")
-                
+
                 # Validación de tolerancia al riesgo
                 while True:
                     try:
@@ -529,7 +531,9 @@ def ejecutar_sistema():
                         if 1 <= tolerancia <= 10:
                             break
                         else:
-                            print("Error: La tolerancia al riesgo debe estar entre 1 y 10.")
+                            print(
+                                "Error: La tolerancia al riesgo debe estar entre 1 y 10."
+                            )
                     except ValueError:
                         print("Error: Por favor, ingrese un número válido.")
 
@@ -537,7 +541,7 @@ def ejecutar_sistema():
                 resultado = sed.evaluar(edad, ingresos, conocimiento, tolerancia)
 
                 print("\n" + "-" * 60)
-                print(f"Resultado del análisis para el inversor:")
+                print("Resultado del análisis para el inversor:")
                 print("-" * 60)
                 print(f"Edad: {edad} años")
                 print(f"Ingresos mensuales: ${ingresos}")
