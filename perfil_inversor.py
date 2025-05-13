@@ -32,10 +32,10 @@ class SistemaExpertoDifusoInversorFCL:
     def __init__(self):
         """Inicializa el sistema experto difuso"""
         # Definir variables de entrada (universos de discurso)
-        self.edad = ctrl.Antecedent(np.arange(18, 101, 1), "edad")
-        self.ingresos = ctrl.Antecedent(np.arange(0, 15001, 100), "ingresos")
-        self.conocimiento = ctrl.Antecedent(np.arange(0, 11, 1), "conocimiento")
-        self.tolerancia = ctrl.Antecedent(np.arange(0, 11, 1), "tolerancia")
+        self.edad = ctrl.Antecedent(np.arange(17, 101, 1), "edad")
+        self.ingresos = ctrl.Antecedent(np.arange(-1, 15001, 100), "ingresos")
+        self.conocimiento = ctrl.Antecedent(np.arange(-1, 11, 1), "conocimiento")
+        self.tolerancia = ctrl.Antecedent(np.arange(-1, 11, 1), "tolerancia")
 
         # Definir variables de salida
         self.potencial = ctrl.Consequent(np.arange(0, 11, 0.1), "potencial")
@@ -322,23 +322,23 @@ class SistemaExpertoDifusoInversorFCL:
         Evalúa el perfil de inversión con los valores dados
 
         Args:
-            edad (int): Edad del inversor (18-100)
-            ingresos (int): Ingresos mensuales (0-15,000)
-            conocimiento (int): Nivel de conocimiento financiero (0-10)
-            tolerancia (int): Tolerancia al riesgo (0-10)
+            edad (int): Edad del inversor (19-100)
+            ingresos (int): Ingresos mensuales (1-15,000)
+            conocimiento (int): Nivel de conocimiento financiero (1-10)
+            tolerancia (int): Tolerancia al riesgo (1-10)
 
         Returns:
             dict: Resultado con el perfil, potencial y riesgo
         """
         # Validar entradas
-        if not (18 <= edad <= 100):
-            raise ValueError("La edad debe estar entre 18 y 100 años")
-        if not (0 <= ingresos <= 15000):
-            raise ValueError("Los ingresos deben estar entre 0 y 15,000")
-        if not (0 <= conocimiento <= 10):
-            raise ValueError("El conocimiento debe estar entre 0 y 10")
-        if not (0 <= tolerancia <= 10):
-            raise ValueError("La tolerancia al riesgo debe estar entre 0 y 10")
+        if not (19 <= edad <= 100):
+            raise ValueError("La edad debe estar entre 19 y 100 años")
+        if not (1 <= ingresos <= 15000):
+            raise ValueError("Los ingresos deben estar entre 1 y 15,000")
+        if not (1 <= conocimiento <= 10):
+            raise ValueError("El conocimiento debe estar entre 1 y 10")
+        if not (1 <= tolerancia <= 10):
+            raise ValueError("La tolerancia al riesgo debe estar entre 1 y 10")
 
         try:
             # Resetear la simulación
@@ -477,15 +477,61 @@ def ejecutar_sistema():
         while True:
             try:
                 print("\nIngrese los datos del inversor (o 'salir' para terminar):")
-                entrada = input("\n- Edad (18-100 años): ")
-
+                
+                # Validación de edad
+                while True:
+                    entrada = input("\n- Edad (19-100 años): ")
+                    
+                    if entrada.lower() in ["salir", "exit", "q"]:
+                        break
+                        
+                    try:
+                        edad = int(entrada)
+                        if 19 <= edad <= 100:
+                            break
+                        else:
+                            print("Error: La edad debe estar entre 19 y 100 años.")
+                    except ValueError:
+                        print("Error: Por favor, ingrese un número entero válido.")
+                
                 if entrada.lower() in ["salir", "exit", "q"]:
                     break
-
-                edad = int(entrada)
-                ingresos = int(input("- Ingresos mensuales (0-15,000): "))
-                conocimiento = float(input("- Conocimiento financiero (0-10): "))
-                tolerancia = float(input("- Tolerancia al riesgo (0-10): "))
+                    
+                # Validación de ingresos
+                while True:
+                    try:
+                        ingresos_str = input("- Ingresos mensuales (1-15,000): ")
+                        ingresos = int(ingresos_str)
+                        if 1 <= ingresos <= 15000:
+                            break
+                        else:
+                            print("Error: Los ingresos deben estar entre 1 y 15,000.")
+                    except ValueError:
+                        print("Error: Por favor, ingrese un número entero válido.")
+                
+                # Validación de conocimiento financiero
+                while True:
+                    try:
+                        conocimiento_str = input("- Conocimiento financiero (1-10): ")
+                        conocimiento = float(conocimiento_str)
+                        if 1 <= conocimiento <= 10:
+                            break
+                        else:
+                            print("Error: El nivel de conocimiento debe estar entre 1 y 10.")
+                    except ValueError:
+                        print("Error: Por favor, ingrese un número válido.")
+                
+                # Validación de tolerancia al riesgo
+                while True:
+                    try:
+                        tolerancia_str = input("- Tolerancia al riesgo (1-10): ")
+                        tolerancia = float(tolerancia_str)
+                        if 1 <= tolerancia <= 10:
+                            break
+                        else:
+                            print("Error: La tolerancia al riesgo debe estar entre 1 y 10.")
+                    except ValueError:
+                        print("Error: Por favor, ingrese un número válido.")
 
                 # Evaluar perfil
                 resultado = sed.evaluar(edad, ingresos, conocimiento, tolerancia)
