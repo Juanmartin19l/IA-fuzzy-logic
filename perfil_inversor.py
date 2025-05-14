@@ -32,16 +32,16 @@ class SistemaExpertoDifusoInversorFCL:
     def __init__(self):
         """Inicializa el sistema experto difuso"""
         # Definir variables de entrada (universos de discurso)
-        self.edad = ctrl.Antecedent(np.arange(17, 101, 1), "edad")
-        self.ingresos = ctrl.Antecedent(np.arange(-1, 15001, 100), "ingresos")
-        self.conocimiento = ctrl.Antecedent(np.arange(-1, 11, 1), "conocimiento")
-        self.tolerancia = ctrl.Antecedent(np.arange(-1, 11, 1), "tolerancia")
+        self.edad = ctrl.Antecedent(np.arange(18, 101, 1), "edad")
+        self.ingresos = ctrl.Antecedent(np.arange(0, 15001, 100), "ingresos")
+        self.conocimiento = ctrl.Antecedent(np.arange(0, 11, 1), "conocimiento")
+        self.tolerancia = ctrl.Antecedent(np.arange(0, 11, 1), "tolerancia")
 
         # Definir variables de salida
         self.potencial = ctrl.Consequent(np.arange(0, 11, 0.1), "potencial")
         self.riesgo = ctrl.Consequent(np.arange(0, 11, 0.1), "riesgo")
         self.perfil_inversor = ctrl.Consequent(
-            np.arange(0, 3.1, 0.1), "perfil_inversor"
+            np.arange(0, 11, 0.1), "perfil_inversor"
         )
 
         # Definir las funciones de pertenencia para cada variable
@@ -115,16 +115,16 @@ class SistemaExpertoDifusoInversorFCL:
 
         # Funciones de membresía para PERFIL INVERSOR (salida)
         # TERM conservador := (0, 1) (1, 0);
-        self.perfil_inversor["conservador"] = fuzz.trimf(
-            self.perfil_inversor.universe, [0, 0, 1]
+        self.perfil_inversor["conservador"] = fuzz.trapmf(
+            self.perfil_inversor.universe, [0, 0, 2, 4]
         )
         # TERM moderado := (0.5, 0) (1.5, 1) (2.5, 0);
-        self.perfil_inversor["moderado"] = fuzz.trimf(
-            self.perfil_inversor.universe, [0.5, 1.5, 2.5]
+        self.perfil_inversor["moderado"] = fuzz.trapmf(
+            self.perfil_inversor.universe, [3, 4, 6, 7]
         )
         # TERM agresivo := (2, 0) (3, 1);
-        self.perfil_inversor["agresivo"] = fuzz.trimf(
-            self.perfil_inversor.universe, [2, 3, 3]
+        self.perfil_inversor["agresivo"] = fuzz.trapmf(
+            self.perfil_inversor.universe, [6, 8, 10, 10]
         )
 
     def definir_reglas(self):
@@ -359,9 +359,9 @@ class SistemaExpertoDifusoInversorFCL:
             valor_perfil = self.simulacion.output["perfil_inversor"]
 
             # Determinar perfil lingüístico según el valor numérico
-            if valor_perfil <= 1.0:
+            if valor_perfil <= 4.0:
                 perfil_texto = "Conservador"
-            elif valor_perfil <= 2.0:
+            elif valor_perfil <= 7.0:
                 perfil_texto = "Moderado"
             else:
                 perfil_texto = "Agresivo"
@@ -378,16 +378,16 @@ class SistemaExpertoDifusoInversorFCL:
             # Si hay un error, devolvemos un perfil por defecto basado en reglas simples
             if edad >= 60:
                 perfil_defecto = "Conservador"
-                valor_defecto = 0.5
+                valor_defecto = 2.0
             elif ingresos < 1000:
                 perfil_defecto = "Conservador"
-                valor_defecto = 0.7
+                valor_defecto = 3.0
             elif tolerancia >= 8:
                 perfil_defecto = "Agresivo"
-                valor_defecto = 2.5
+                valor_defecto = 8.0
             else:
                 perfil_defecto = "Moderado"
-                valor_defecto = 1.5
+                valor_defecto = 5.0
 
             return {
                 "perfil": perfil_defecto,
@@ -551,7 +551,7 @@ def ejecutar_sistema():
                 print(f"Potencial de inversión: {resultado['potencial']:.2f}/10")
                 print(f"Nivel de riesgo: {resultado['riesgo']:.2f}/10")
                 print(f"Perfil del inversor: {resultado['perfil']}")
-                print(f"Valor numérico: {resultado['valor_perfil']:.2f}/3")
+                print(f"Valor numérico: {resultado['valor_perfil']:.2f}/10")
 
                 # Preguntar si desea ver las gráficas
                 ver_graficas = input(
