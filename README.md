@@ -96,17 +96,17 @@ Para ejecutar el sistema se necesita:
 
    ```bash
    # Crear el entorno virtual
-   python -m venv venv
+   python -m venv .venv
    ```
 
    ```bash
    # Activar el entorno virtual en macOS/Linux
-   source venv/bin/activate
+   source .venv/bin/activate
    ```
 
    ```bash
    # Activar el entorno virtual en Windows
-   .\venv\Scripts\activate
+   .\.venv\Scripts\activate
 
    ```
 
