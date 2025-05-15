@@ -96,14 +96,16 @@ class SistemaExpertoDifusoInversorFCL:
 
         # Funciones de membresía para variable PERFIL INVERSOR (escala 0-10)
         # Utilizamos gaussianas para transiciones más suaves entre perfiles
-        self.perfil_inversor["conservador"] = fuzz.gaussmf(
-            self.perfil_inversor.universe, 2, 1.5
+
+        self.perfil_inversor["conservador"] = fuzz.trapmf(
+            self.perfil_inversor.universe, [0, 0, 2.5, 4.5]
         )
-        self.perfil_inversor["moderado"] = fuzz.gaussmf(
-            self.perfil_inversor.universe, 5, 1.5
+        self.perfil_inversor["moderado"] = fuzz.trimf(
+            self.perfil_inversor.universe, [3.5, 5, 7.5]
         )
-        self.perfil_inversor["agresivo"] = fuzz.gaussmf(
-            self.perfil_inversor.universe, 8, 1.5
+
+        self.perfil_inversor["agresivo"] = fuzz.trapmf(
+            self.perfil_inversor.universe, [6.5, 8.5, 10, 10]
         )
 
     def definir_reglas(self):

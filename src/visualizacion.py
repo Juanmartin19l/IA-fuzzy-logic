@@ -25,11 +25,6 @@ class VisualizadorSistemaExperto:
         try:
             # Configuración del lienzo de visualización
             fig, axs = plt.subplots(nrows=7, figsize=(12, 16))
-            fig.suptitle(
-                "Funciones de Membresía del Sistema Experto Difuso",
-                fontsize=16,
-                fontweight="bold",
-            )
 
             # Visualización de variables de entrada
             sistema_experto.edad.view(sim=sistema_experto.simulacion, ax=axs[0])
@@ -78,16 +73,6 @@ class VisualizadorSistemaExperto:
                 rect=[0, 0, 1, 0.97]
             )  # Dejar espacio para el título general
             plt.subplots_adjust(top=0.95)  # Ajustar para el título
-
-            # Agregar información adicional en la parte inferior
-            plt.figtext(
-                0.5,
-                0.01,
-                "Sistema Experto Difuso para Determinación de Perfiles de Inversión",
-                ha="center",
-                fontsize=10,
-                fontstyle="italic",
-            )
 
             # Mostrar gráfico
             plt.show()
@@ -192,16 +177,6 @@ class VisualizadorSistemaExperto:
             # Optimizar visualización
             plt.tight_layout(rect=[0, 0, 1, 0.95])
             plt.subplots_adjust(top=0.9)
-
-            # Agregar metadatos
-            plt.figtext(
-                0.5,
-                0.01,
-                "© Sistema Experto basado en Lógica Difusa",
-                ha="center",
-                fontsize=9,
-                fontstyle="italic",
-            )
 
             plt.show()
         except Exception as e:
