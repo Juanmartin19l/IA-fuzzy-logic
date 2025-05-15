@@ -53,15 +53,15 @@ El proyecto ha sido organizado de forma modular para facilitar su mantenimiento 
    - Medio: 3-7
    - Alto: 6-10
 
-### Variable de salida
+## Variable de salida
 
-**Perfil de inversor (escala 0-3)**:
+**Perfil de inversor (escala 0-10)**:
 
-- Conservador: 0-1
-- Moderado: 0.5-2.5
-- Agresivo: 2-3
+- Conservador: 0-3.33
+- Moderado: 3.5-6.66
+- Agresivo: 6.66-10
 
-### Modelo de inferencia difusa
+## Modelo de inferencia difusa
 
 El sistema implementa 27 reglas de inferencia distribuidas en tres bloques:
 
@@ -73,7 +73,7 @@ El sistema implementa 27 reglas de inferencia distribuidas en tres bloques:
 2. **Bloque para calcular el nivel de riesgo** (9 reglas)
 
    - Combina conocimiento financiero y tolerancia al riesgo
-   - Ejemplo: "IF conocimiento IS alto AND tolerancia IS baja THEN riesgo IS bajo"
+   - Ejemplo: "IF tolerancia IS bajo AND conocimiento IS alto THEN riesgo IS bajo"
 
 3. **Bloque para determinar el perfil final del inversor** (9 reglas)
    - Combina potencial de inversión y nivel de riesgo
@@ -116,37 +116,54 @@ Para ejecutar el sistema se necesita:
    pip install -r requirements.txt
    ```
 
-## Uso
+## Ejecución y Uso
 
-Para ejecutar el sistema, simplemente ejecute:
+Para ejecutar el sistema, utilice:
 
 ```bash
-python perfil_inversor.py
+python main.py
 ```
 
 El programa solicitará los siguientes datos:
 
-- Edad del inversor (entre 18 y 100 años)
-- Ingresos mensuales (entre 0 y 15,000)
-- Nivel de conocimiento financiero (entre 0 y 10)
-- Tolerancia al riesgo (entre 0 y 10)
+- Edad del inversor (entre 20 y 100 años)
+- Ingresos mensuales (entre 1 y 15,000 unidades monetarias)
+- Nivel de conocimiento financiero (entre 1 y 10)
+- Tolerancia al riesgo (entre 1 y 10)
 
 Después de procesar los datos, el sistema mostrará:
 
-- El perfil del inversor (Conservador, Moderado o Agresivo)
+- El perfil del inversor determinado (Conservador, Moderado o Agresivo)
+- El valor numérico del perfil en escala de 0-10
 - El potencial de inversión calculado (0-10)
 - El nivel de riesgo calculado (0-10)
-- Opción para visualizar gráficamente las funciones de membresía y resultados
+- Opción para visualizar gráficamente las funciones de membresía y resultados de la inferencia
+
+## Características principales
+
+- Evaluación de perfiles de inversión basada en 4 variables de entrada
+- Categorización en 3 perfiles de inversor: Conservador, Moderado y Agresivo
+- Visualización de las funciones de membresía y resultados mediante gráficos
+- Interfaz de usuario por consola, interactiva y amigable
+- Sistema de respaldo basado en reglas heurísticas simplificadas
 
 ## Implementación técnica
 
-El código está estructurado en una clase principal `SistemaExpertoDifusoInversorFCL` que implementa:
+El código está estructurado en clases modulares:
+
+### Clase SistemaExpertoDifusoInversorFCL
 
 - Definición de variables lingüísticas (Antecedentes y Consecuentes)
 - Configuración de funciones de membresía triangulares (trimf) y trapezoidales (trapmf)
 - Establecimiento de reglas difusas mediante operadores AND (&)
 - Creación del sistema de control difuso y simulación
-- Métodos para evaluar entradas y visualizar resultados
+- Método `evaluar()` para procesar entradas y obtener el perfil resultante
+
+### Clase VisualizadorSistemaExperto
+
+- Visualización de todas las funciones de membresía del sistema
+- Representación gráfica del proceso de defuzzificación
+- Visualización de resultados con indicadores para los valores obtenidos
 
 ### Elementos clave del código
 
@@ -164,27 +181,41 @@ El sistema implementa un mecanismo robusto de manejo de errores:
 - Manejo de errores durante la inferencia difusa con mecanismo de reglas por defecto
 - Tratamiento de excepciones durante la visualización
 
+## Visualización
+
+El módulo de visualización (`visualizacion.py`) proporciona dos tipos principales de visualizaciones:
+
+1. **Visualización de variables lingüísticas**: Muestra las funciones de membresía de todas las variables del sistema:
+
+   - Variables de entrada: Edad, Ingresos, Conocimiento y Tolerancia
+   - Variables intermedias: Potencial y Riesgo
+   - Variable de salida: Perfil de inversor
+
+2. **Visualización de resultados**: Muestra gráficamente el proceso de inferencia y los valores resultantes:
+   - Gráfico del potencial de inversión inferido con valor numérico
+   - Gráfico del nivel de riesgo inferido con valor numérico
+   - Gráfico del perfil resultante con indicación del tipo (Conservador, Moderado o Agresivo)
+
 ## Ejemplos de perfiles
 
-1. **Perfil Conservador**:
+1. **Perfil Conservador** (0-3.33):
 
-   - Personas mayores con ingresos bajos/medios
+   - Personas mayores (>60 años) con ingresos bajos/medios
    - Personas con bajo potencial de inversión independientemente del riesgo
+   - Recomendable para inversores que priorizan la seguridad sobre la rentabilidad
 
-2. **Perfil Moderado**:
+2. **Perfil Moderado** (3.33-6.66):
 
    - Personas con potencial medio y riesgo bajo/medio
    - Adultos con ingresos medios y conocimiento financiero medio
+   - Balance entre seguridad y rentabilidad
 
-3. **Perfil Agresivo**:
+3. **Perfil Agresivo** (6.66-10):
    - Jóvenes con altos ingresos y alta tolerancia al riesgo
-   - Personas con alto potencial de inversión
+   - Personas con alto potencial de inversión y conocimiento financiero
    - Personas con potencial medio pero alto nivel de riesgo
+   - Enfocado en maximizar la rentabilidad aceptando mayor volatilidad
 
 ## Referencias
 
-El sistema está basado en el estándar FCL (Fuzzy Control Language) y utiliza conceptos de la teoría de conjuntos difusos desarrollada por Lotfi Zadeh.
-
-## Licencia
-
-Este proyecto está disponible como software de código abierto.
+El sistema está basado en los principios de la lógica difusa y utiliza conceptos de la teoría de conjuntos difusos desarrollada por Lotfi Zadeh. La implementación se apoya en la biblioteca scikit-fuzzy de Python.
