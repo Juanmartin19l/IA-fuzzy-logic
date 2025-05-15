@@ -128,9 +128,9 @@ def ejecutar_sistema():
                 print("  • Edad: " + str(edad) + " años")
                 print("  • Ingresos mensuales: $" + str(ingresos))
                 print("  • Conocimiento financiero: " + str(conocimiento) + "/10")
-                print("  • Tolerancia al riesgo: " + str(tolerancia) + "/10")
-
-                # Sección de resultados de la inferencia
+                print(
+                    "  • Tolerancia al riesgo: " + str(tolerancia) + "/10"
+                )  # Sección de resultados de la inferencia
                 print("\n🔹 RESULTADOS DE LA INFERENCIA DIFUSA:")
                 print(
                     "  • Potencial de inversión: " + f"{resultado['potencial']:.2f}/10"
@@ -140,74 +140,61 @@ def ejecutar_sistema():
                 # Sección de perfil resultante
                 print("\n🔹 PERFIL DE INVERSIÓN RECOMENDADO:")
 
-                # Personalización del mensaje según el perfil (5 perfiles)
-                if resultado["perfil"] == "Muy Conservador":
-                    print(
-                        "  • Perfil: \033[94mMUY CONSERVADOR\033[0m"
-                    )  # Azul para muy conservador
-                    print(
-                        "  • Valor numérico: " + f"{resultado['valor_perfil']:.2f}/10"
-                    )
-                    print(
-                        "  • Recomendación: Inversiones de mínimo riesgo principalmente en"
-                    )
-                    print(
-                        "    depósitos a plazo fijo, cuentas de ahorro y bonos gubernamentales."
-                    )
-                    print("    Máxima prioridad a la preservación del capital.")
-                elif resultado["perfil"] == "Conservador":
-                    print(
-                        "  • Perfil: \033[96mCONSERVADOR\033[0m"
-                    )  # Cyan para conservador
-                    print(
-                        "  • Valor numérico: " + f"{resultado['valor_perfil']:.2f}/10"
-                    )
-                    print(
-                        "  • Recomendación: Inversiones de bajo riesgo como bonos de alta calidad,"
-                    )
-                    print(
-                        "    fondos de renta fija y una pequeña parte (10-20%) en renta variable."
-                    )
-                elif resultado["perfil"] == "Moderado":
-                    print(
-                        "  • Perfil: \033[93mMODERADO\033[0m"
-                    )  # Amarillo para moderado
-                    print(
-                        "  • Valor numérico: " + f"{resultado['valor_perfil']:.2f}/10"
-                    )
-                    print(
-                        "  • Recomendación: Cartera equilibrada con aproximadamente 40-60% en"
-                    )
-                    print("    renta fija y 40-60% en renta variable diversificada.")
-                elif resultado["perfil"] == "Agresivo":
-                    print(
-                        "  • Perfil: \033[91mAGRESIVO\033[0m"
-                    )  # Rojo claro para agresivo
-                    print(
-                        "  • Valor numérico: " + f"{resultado['valor_perfil']:.2f}/10"
-                    )
-                    print(
-                        "  • Recomendación: Mayor proporción (70-80%) en renta variable,"
-                    )
-                    print(
-                        "    fondos de inversión de alto rendimiento y menor parte en renta fija."
-                    )
-                else:  # Muy Agresivo
-                    print(
-                        "  • Perfil: \033[31;1mMUY AGRESIVO\033[0m"
-                    )  # Rojo intenso para muy agresivo
-                    print(
-                        "  • Valor numérico: " + f"{resultado['valor_perfil']:.2f}/10"
-                    )
-                    print(
-                        "  • Recomendación: Cartera principalmente en activos de alto riesgo/rendimiento,"
-                    )
-                    print(
-                        "    como acciones de mercados emergentes, capital privado, derivados y"
-                    )
-                    print(
-                        "    criptomonedas. Máxima prioridad al crecimiento del capital."
-                    )
+                # Personalización del mensaje según el valor numérico del perfil
+                valor = resultado["valor_perfil"]
+
+                # Determinar perfil y color basado en el valor numérico
+                if valor <= 2.0:
+                    perfil_texto = "\033[94mCONSERVADOR\033[0m"  # Azul
+                    recomendaciones = [
+                        "• 80% en depósitos a plazo fijo y cuentas de ahorro de alta seguridad",
+                        "• 15% en bonos gubernamentales de bajo riesgo",
+                        "• 5% en bonos corporativos AAA",
+                        "→ Máxima prioridad: Preservación del capital",
+                    ]
+                elif valor <= 4.0:
+                    perfil_texto = "\033[96mCONSERVADOR\033[0m"  # Cyan
+                    recomendaciones = [
+                        "• 60% en bonos gubernamentales y corporativos de alta calidad",
+                        "• 20% en depósitos a plazo fijo",
+                        "• 15% en fondos de inversión de renta fija",
+                        "• 5% en acciones blue-chip",
+                        "→ Prioridad: Estabilidad con rendimiento moderado",
+                    ]
+                elif valor <= 6.0:
+                    perfil_texto = "\033[93mMODERADO\033[0m"  # Amarillo
+                    recomendaciones = [
+                        "• 40% en renta fija de alta calidad",
+                        "• 30% en acciones de empresas establecidas",
+                        "• 20% en fondos mixtos",
+                        "• 10% en inversiones alternativas conservadoras",
+                        "→ Prioridad: Balance entre crecimiento y seguridad",
+                    ]
+                elif valor <= 8.0:
+                    perfil_texto = "\033[91mAGRESIVO\033[0m"  # Rojo claro
+                    recomendaciones = [
+                        "• 60% en renta variable diversificada",
+                        "• 20% en fondos de inversión de alto rendimiento",
+                        "• 10% en mercados emergentes",
+                        "• 10% en renta fija",
+                        "→ Prioridad: Crecimiento del capital a largo plazo",
+                    ]
+                else:
+                    perfil_texto = "\033[31;1mAGRESIVO\033[0m"  # Rojo intenso
+                    recomendaciones = [
+                        "• 70% en renta variable de alto crecimiento",
+                        "• 15% en mercados emergentes",
+                        "• 10% en capital privado y startups",
+                        "• 5% en criptomonedas",
+                        "→ Prioridad: Máximo rendimiento con alta tolerancia al riesgo",
+                    ]
+
+                # Imprimir perfil y recomendaciones
+                print(f"  • Perfil: {perfil_texto}")
+                print(f"  • Valor numérico: {valor:.2f}/10")
+                print("  • Recomendación de cartera:")
+                for rec in recomendaciones:
+                    print(f"    {rec}")
 
                 print("\n" + "─" * 70)
 
