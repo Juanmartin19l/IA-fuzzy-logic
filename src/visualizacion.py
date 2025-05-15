@@ -161,7 +161,7 @@ class VisualizadorSistemaExperto:
             ax2.grid(True, linestyle="--", alpha=0.6)
             ax2.legend()
 
-            # Anotar el valor resultante y su interpretación lingüística (actualizada para 5 perfiles)
+            # Anotar el valor resultante
             if (
                 hasattr(sistema_experto.simulacion, "output")
                 and "perfil_inversor" in sistema_experto.simulacion.output
@@ -169,20 +169,14 @@ class VisualizadorSistemaExperto:
                 valor = sistema_experto.simulacion.output["perfil_inversor"]
 
                 # Determinación del perfil según el valor numérico
-                if valor <= 2.0:
-                    perfil = "Muy Conservador"
-                    color = "blue"
-                elif valor <= 4.0:
+                if valor <= 3.33:
                     perfil = "Conservador"
-                    color = "skyblue"
-                elif valor <= 6.0:
+                    color = "blue"
+                elif valor <= 6.66:
                     perfil = "Moderado"
                     color = "green"
-                elif valor <= 8.0:
-                    perfil = "Agresivo"
-                    color = "orange"
                 else:
-                    perfil = "Muy Agresivo"
+                    perfil = "Agresivo"
                     color = "red"
 
                 ax2.axvline(x=valor, color=color, linestyle="--", alpha=0.8)

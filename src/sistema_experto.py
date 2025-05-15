@@ -49,285 +49,203 @@ class SistemaExpertoDifusoInversorFCL:
         """
         Define las funciones de membresía para todas las variables lingüísticas del sistema.
 
-        Implementa funciones gaussianas (gaussmf), sigmoidales (sigmf), triangulares (trimf)
-        y trapezoidales (trapmf) para modelar los conjuntos difusos correspondientes a cada
-        término lingüístico de manera más precisa.
+        Implementa funciones triangulares (trimf) y trapezoidales (trapmf) para modelar
+        los conjuntos difusos correspondientes a cada término lingüístico.
         """
         # Funciones de membresía para variable EDAD
-        # Para edad usamos gaussianas que modelan mejor la transición gradual entre etapas
-        self.edad["joven"] = fuzz.gaussmf(
-            self.edad.universe, 27, 5
-        )  # Centro en 27 años con dispersión de 5
-        self.edad["adulto"] = fuzz.gaussmf(
-            self.edad.universe, 42, 7
-        )  # Centro en 42 años con dispersión de 7
-        self.edad["mayor"] = fuzz.sigmf(
-            self.edad.universe, 60, 0.15
-        )  # Transición suave desde 60 años
+        self.edad["joven"] = fuzz.trapmf(
+            self.edad.universe, [20, 20, 30, 40]
+        )  # Hasta 40 años
+        self.edad["medio"] = fuzz.trimf(
+            self.edad.universe, [35, 45, 55]
+        )  # Entre 35 y 55
+        self.edad["mayor"] = fuzz.trapmf(
+            self.edad.universe, [50, 60, 100, 100]
+        )  # Desde 50
 
         # Funciones de membresía para variable INGRESOS (en unidades monetarias)
-        # Para ingresos usamos combinación de gausianas para bajo/medio y sigmoidal para altos ingresos
-        self.ingresos["bajo"] = fuzz.gaussmf(
-            self.ingresos.universe, 1000, 600
-        )  # Centro en 1000 con dispersión
-        self.ingresos["medio"] = fuzz.gaussmf(
-            self.ingresos.universe, 3000, 900
-        )  # Centro en 3000 con dispersión
-        self.ingresos["alto"] = fuzz.sigmf(
-            self.ingresos.universe, 5000, 0.001
-        )  # Transición gradual desde 5000
+        self.ingresos["bajo"] = fuzz.trapmf(self.ingresos.universe, [0, 0, 1000, 2000])
+        self.ingresos["medio"] = fuzz.trimf(self.ingresos.universe, [1500, 3000, 4500])
+        self.ingresos["alto"] = fuzz.trapmf(
+            self.ingresos.universe, [4000, 5000, 15000, 15000]
+        )
 
         # Funciones de membresía para variable CONOCIMIENTO (escala 0-10)
-        # Usamos funciones que reflejan mejor la percepción y autoevaluación del conocimiento financiero
-        self.conocimiento["bajo"] = fuzz.gaussmf(
-            self.conocimiento.universe, 2, 1.2
-        )  # Conocimiento básico
-        self.conocimiento["medio"] = fuzz.gaussmf(
-            self.conocimiento.universe, 5.5, 1.5
-        )  # Conocimiento intermedio
-        self.conocimiento["alto"] = fuzz.sigmf(
-            self.conocimiento.universe, 7.5, 1.5
-        )  # Conocimiento avanzado
+        self.conocimiento["bajo"] = fuzz.trapmf(
+            self.conocimiento.universe, [0, 0, 2, 4]
+        )
+        self.conocimiento["medio"] = fuzz.trimf(self.conocimiento.universe, [3, 5, 7])
+        self.conocimiento["alto"] = fuzz.trapmf(
+            self.conocimiento.universe, [6, 8, 10, 10]
+        )
 
         # Funciones de membresía para variable TOLERANCIA AL RIESGO (escala 0-10)
-        # La tolerancia al riesgo tiene transiciones más definidas por lo que usamos sigmoidales para los extremos
-        self.tolerancia["baja"] = fuzz.sigmf(
-            self.tolerancia.universe, 3, -2
-        )  # Baja tolerancia, curva descendente
-        self.tolerancia["media"] = fuzz.gaussmf(
-            self.tolerancia.universe, 5, 1.5
-        )  # Tolerancia moderada
-        self.tolerancia["alta"] = fuzz.sigmf(
-            self.tolerancia.universe, 7, 2
-        )  # Alta tolerancia, curva ascendente
+        self.tolerancia["bajo"] = fuzz.trapmf(self.tolerancia.universe, [0, 0, 2, 4])
+        self.tolerancia["medio"] = fuzz.trimf(self.tolerancia.universe, [3, 5, 7])
+        self.tolerancia["alto"] = fuzz.trapmf(self.tolerancia.universe, [6, 8, 10, 10])
 
-        # Funciones de membresía para variable POTENCIAL DE INVERSIÓN (variable de salida, escala 0-10)
-        # Para variables de salida usamos gaussianas que permiten una defuzzificación más precisa
-        self.potencial["bajo"] = fuzz.gaussmf(
-            self.potencial.universe, 2, 1.5
-        )  # Bajo potencial
-        self.potencial["medio"] = fuzz.gaussmf(
-            self.potencial.universe, 5, 1.2
-        )  # Potencial medio
-        self.potencial["alto"] = fuzz.gaussmf(
-            self.potencial.universe, 8, 1.5
-        )  # Alto potencial
+        # Funciones de membresía para variable POTENCIAL DE INVERSIÓN (escala 0-10)
+        self.potencial["bajo"] = fuzz.trapmf(self.potencial.universe, [0, 0, 2, 4])
+        self.potencial["medio"] = fuzz.trimf(self.potencial.universe, [3, 5, 7])
+        self.potencial["alto"] = fuzz.trapmf(self.potencial.universe, [6, 8, 10, 10])
 
-        # Funciones de membresía para variable RIESGO (variable de salida, escala 0-10)
-        self.riesgo["bajo"] = fuzz.gaussmf(self.riesgo.universe, 2, 1.5)  # Bajo riesgo
-        self.riesgo["medio"] = fuzz.gaussmf(
-            self.riesgo.universe, 5, 1.2
-        )  # Riesgo medio
-        self.riesgo["alto"] = fuzz.gaussmf(self.riesgo.universe, 8, 1.5)  # Alto riesgo
+        # Funciones de membresía para variable RIESGO (escala 0-10)
+        self.riesgo["bajo"] = fuzz.trapmf(self.riesgo.universe, [0, 0, 2, 4])
+        self.riesgo["medio"] = fuzz.trimf(self.riesgo.universe, [3, 5, 7])
+        self.riesgo["alto"] = fuzz.trapmf(self.riesgo.universe, [6, 8, 10, 10])
 
-        # Funciones de membresía para variable PERFIL INVERSOR (variable final de salida, escala 0-10)
-        # Actualizamos a 5 perfiles con transiciones más suaves entre categorías
-        self.perfil_inversor["muy_conservador"] = fuzz.gaussmf(
-            self.perfil_inversor.universe,
-            1,
-            0.8,  # Perfil muy conservador: valores cercanos a 1
-        )
+        # Funciones de membresía para variable PERFIL INVERSOR (escala 0-10)
+        # Utilizamos gaussianas para transiciones más suaves entre perfiles
         self.perfil_inversor["conservador"] = fuzz.gaussmf(
-            self.perfil_inversor.universe,
-            3,
-            0.8,  # Perfil conservador: valores cercanos a 3
+            self.perfil_inversor.universe, 2, 1.5
         )
         self.perfil_inversor["moderado"] = fuzz.gaussmf(
-            self.perfil_inversor.universe,
-            5,
-            0.8,  # Perfil moderado: valores cercanos a 5
+            self.perfil_inversor.universe, 5, 1.5
         )
         self.perfil_inversor["agresivo"] = fuzz.gaussmf(
-            self.perfil_inversor.universe,
-            7,
-            0.8,  # Perfil agresivo: valores cercanos a 7
-        )
-        self.perfil_inversor["muy_agresivo"] = fuzz.gaussmf(
-            self.perfil_inversor.universe,
-            9,
-            0.8,  # Perfil muy agresivo: valores cercanos a 9
+            self.perfil_inversor.universe, 8, 1.5
         )
 
     def definir_reglas(self):
         """
-        Define el conjunto de reglas difusas para el sistema.
+        Define el conjunto de reglas difusas para el sistema según las tablas de decisión.
 
-        Retorna:
-            list: Lista de reglas de inferencia del sistema utilizando operadores AND (&).
+        Returns:
+            list: Lista de reglas de inferencia usando operadores AND (&)
         """
         reglas = []
 
-        # -------- Bloque 1: Reglas para determinar el potencial de inversión --------
-        # Basadas en la edad y el nivel de ingresos del inversor
+        # ----- Bloque 1: Reglas para determinar el potencial de inversión -----
+        # Basadas en la edad y nivel de ingresos del inversor
+
+        # Reglas para edad joven
         reglas.append(
             ctrl.Rule(
                 self.edad["joven"] & self.ingresos["bajo"], self.potencial["bajo"]
             )
         )
-        # RULE 2 : IF edad IS joven AND ingresos IS medio THEN potencial IS medio;
         reglas.append(
             ctrl.Rule(
                 self.edad["joven"] & self.ingresos["medio"], self.potencial["medio"]
             )
         )
-        # RULE 3 : IF edad IS joven AND ingresos IS alto THEN potencial IS alto;
         reglas.append(
             ctrl.Rule(
                 self.edad["joven"] & self.ingresos["alto"], self.potencial["alto"]
             )
         )
-        # RULE 4 : IF edad IS adulto AND ingresos IS bajo THEN potencial IS bajo;
+
+        # Reglas para edad medio
         reglas.append(
             ctrl.Rule(
-                self.edad["adulto"] & self.ingresos["bajo"], self.potencial["bajo"]
+                self.edad["medio"] & self.ingresos["bajo"], self.potencial["bajo"]
             )
         )
-        # RULE 5 : IF edad IS adulto AND ingresos IS medio THEN potencial IS medio;
         reglas.append(
             ctrl.Rule(
-                self.edad["adulto"] & self.ingresos["medio"], self.potencial["medio"]
+                self.edad["medio"] & self.ingresos["medio"], self.potencial["medio"]
             )
         )
-        # RULE 6 : IF edad IS adulto AND ingresos IS alto THEN potencial IS alto;
         reglas.append(
             ctrl.Rule(
-                self.edad["adulto"] & self.ingresos["alto"], self.potencial["alto"]
+                self.edad["medio"] & self.ingresos["alto"], self.potencial["alto"]
             )
         )
-        # RULE 7 : IF edad IS mayor AND ingresos IS bajo THEN potencial IS bajo;
+
+        # Reglas para edad mayor
         reglas.append(
             ctrl.Rule(
                 self.edad["mayor"] & self.ingresos["bajo"], self.potencial["bajo"]
             )
         )
-        # RULE 8 : IF edad IS mayor AND ingresos IS medio THEN potencial IS bajo;
         reglas.append(
             ctrl.Rule(
                 self.edad["mayor"] & self.ingresos["medio"], self.potencial["bajo"]
             )
         )
-        # RULE 9 : IF edad IS mayor AND ingresos IS alto THEN potencial IS medio;
         reglas.append(
             ctrl.Rule(
                 self.edad["mayor"] & self.ingresos["alto"], self.potencial["medio"]
             )
         )
 
-        # -------- Bloque 2: Reglas para determinar el nivel de riesgo --------
-        # Basadas en el conocimiento financiero y la tolerancia al riesgo
-        # Corrección de las reglas inconsistentes para un modelado más lógico del riesgo
+        # ----- Bloque 2: Reglas para determinar el nivel de riesgo -----
+        # Basadas en el conocimiento financiero y tolerancia al riesgo
 
-        # RULE 10: Conocimiento bajo con baja tolerancia al riesgo -> riesgo bajo
-        # (Una persona con poco conocimiento y baja tolerancia debería tener poco riesgo)
+        # Reglas para tolerancia bajo
         reglas.append(
             ctrl.Rule(
-                self.conocimiento["bajo"] & self.tolerancia["baja"],
+                self.tolerancia["bajo"] & self.conocimiento["bajo"],
+                self.riesgo["medio"],
+            )
+        )
+        reglas.append(
+            ctrl.Rule(
+                self.tolerancia["bajo"] & self.conocimiento["medio"],
                 self.riesgo["bajo"],
             )
         )
-
-        # RULE 11: Conocimiento bajo con tolerancia media -> riesgo medio
-        # (Una persona con poco conocimiento pero tolerancia media acepta riesgo moderado)
         reglas.append(
             ctrl.Rule(
-                self.conocimiento["bajo"] & self.tolerancia["media"],
-                self.riesgo["medio"],
+                self.tolerancia["bajo"] & self.conocimiento["alto"], self.riesgo["bajo"]
             )
         )
 
-        # RULE 12: Conocimiento bajo con alta tolerancia -> riesgo medio
-        # (Aunque tenga alta tolerancia, el bajo conocimiento limita el nivel de riesgo recomendado)
+        # Reglas para tolerancia medio
         reglas.append(
             ctrl.Rule(
-                self.conocimiento["bajo"] & self.tolerancia["alta"],
-                self.riesgo["medio"],
-            )
-        )
-
-        # RULE 13: Conocimiento medio con baja tolerancia -> riesgo bajo
-        # (El conocimiento medio no compensa la baja tolerancia al riesgo)
-        reglas.append(
-            ctrl.Rule(
-                self.conocimiento["medio"] & self.tolerancia["baja"],
-                self.riesgo["bajo"],
-            )
-        )
-
-        # RULE 14: Conocimiento medio con tolerancia media -> riesgo medio
-        # (Combinación equilibrada de conocimiento y tolerancia)
-        reglas.append(
-            ctrl.Rule(
-                self.conocimiento["medio"] & self.tolerancia["media"],
-                self.riesgo["medio"],
-            )
-        )
-
-        # RULE 15: Conocimiento medio con alta tolerancia -> riesgo alto
-        # (La alta tolerancia con conocimiento medio permite asumir mayor riesgo)
-        reglas.append(
-            ctrl.Rule(
-                self.conocimiento["medio"] & self.tolerancia["alta"],
+                self.tolerancia["medio"] & self.conocimiento["bajo"],
                 self.riesgo["alto"],
             )
         )
-
-        # RULE 16: Conocimiento alto con baja tolerancia -> riesgo medio
-        # (A pesar de la baja tolerancia, el alto conocimiento permite un poco más de riesgo)
         reglas.append(
             ctrl.Rule(
-                self.conocimiento["alto"] & self.tolerancia["baja"],
+                self.tolerancia["medio"] & self.conocimiento["medio"],
+                self.riesgo["medio"],
+            )
+        )
+        reglas.append(
+            ctrl.Rule(
+                self.tolerancia["medio"] & self.conocimiento["alto"],
                 self.riesgo["medio"],
             )
         )
 
-        # RULE 17: Conocimiento alto con tolerancia media -> riesgo alto
-        # (El alto conocimiento potencia el efecto de la tolerancia media)
+        # Reglas para tolerancia alto
         reglas.append(
             ctrl.Rule(
-                self.conocimiento["alto"] & self.tolerancia["media"],
+                self.tolerancia["alto"] & self.conocimiento["bajo"], self.riesgo["alto"]
+            )
+        )
+        reglas.append(
+            ctrl.Rule(
+                self.tolerancia["alto"] & self.conocimiento["medio"],
                 self.riesgo["alto"],
             )
         )
-
-        # RULE 18: Conocimiento alto con alta tolerancia -> riesgo alto
-        # (Máximo conocimiento y tolerancia justifican el máximo nivel de riesgo)
         reglas.append(
             ctrl.Rule(
-                self.conocimiento["alto"] & self.tolerancia["alta"],
-                self.riesgo["alto"],
+                self.tolerancia["alto"] & self.conocimiento["alto"],
+                self.riesgo["medio"],
             )
         )
 
-        # -------- Bloque 3: Reglas finales para determinar el perfil de inversor --------
-        # Basadas en la combinación del potencial de inversión y el nivel de riesgo del inversor
-        # Actualizado para 5 perfiles: muy conservador, conservador, moderado, agresivo, muy agresivo
+        # ----- Bloque 3: Reglas finales para determinar el perfil de inversor -----
+        # Basadas en potencial de inversión y nivel de riesgo
 
-        # Reglas para perfil muy conservador:
-        # RULE 19: Potencial bajo y riesgo bajo -> muy conservador
+        # Reglas para potencial bajo
         reglas.append(
             ctrl.Rule(
                 self.potencial["bajo"] & self.riesgo["bajo"],
-                self.perfil_inversor["muy_conservador"],
+                self.perfil_inversor["conservador"],
             )
         )
-
-        # Reglas para perfil conservador:
-        # RULE 20: Potencial bajo y riesgo medio -> conservador
         reglas.append(
             ctrl.Rule(
                 self.potencial["bajo"] & self.riesgo["medio"],
                 self.perfil_inversor["conservador"],
             )
         )
-        # RULE 21: Potencial medio y riesgo bajo -> conservador
-        reglas.append(
-            ctrl.Rule(
-                self.potencial["medio"] & self.riesgo["bajo"],
-                self.perfil_inversor["conservador"],
-            )
-        )
-        # RULE 22: Potencial bajo y riesgo alto -> conservador
-        # (Potencial bajo limita el perfil a pesar del riesgo alto)
         reglas.append(
             ctrl.Rule(
                 self.potencial["bajo"] & self.riesgo["alto"],
@@ -335,44 +253,43 @@ class SistemaExpertoDifusoInversorFCL:
             )
         )
 
-        # Reglas para perfil moderado:
-        # RULE 23: Potencial medio y riesgo medio -> moderado
+        # Reglas para potencial medio
+        reglas.append(
+            ctrl.Rule(
+                self.potencial["medio"] & self.riesgo["bajo"],
+                self.perfil_inversor["moderado"],
+            )
+        )
         reglas.append(
             ctrl.Rule(
                 self.potencial["medio"] & self.riesgo["medio"],
                 self.perfil_inversor["moderado"],
             )
         )
-        # RULE 24: Potencial alto y riesgo bajo -> moderado
-        reglas.append(
-            ctrl.Rule(
-                self.potencial["alto"] & self.riesgo["bajo"],
-                self.perfil_inversor["moderado"],
-            )
-        )
-
-        # Reglas para perfil agresivo:
-        # RULE 25: Potencial medio y riesgo alto -> agresivo
         reglas.append(
             ctrl.Rule(
                 self.potencial["medio"] & self.riesgo["alto"],
                 self.perfil_inversor["agresivo"],
             )
         )
-        # RULE 26: Potencial alto y riesgo medio -> agresivo
+
+        # Reglas para potencial alto
+        reglas.append(
+            ctrl.Rule(
+                self.potencial["alto"] & self.riesgo["bajo"],
+                self.perfil_inversor["moderado"],
+            )
+        )
         reglas.append(
             ctrl.Rule(
                 self.potencial["alto"] & self.riesgo["medio"],
                 self.perfil_inversor["agresivo"],
             )
         )
-
-        # Reglas para perfil muy agresivo:
-        # RULE 27: Potencial alto y riesgo alto -> muy agresivo
         reglas.append(
             ctrl.Rule(
                 self.potencial["alto"] & self.riesgo["alto"],
-                self.perfil_inversor["muy_agresivo"],
+                self.perfil_inversor["agresivo"],
             )
         )
 
@@ -381,10 +298,6 @@ class SistemaExpertoDifusoInversorFCL:
     def evaluar(self, edad, ingresos, conocimiento, tolerancia):
         """
         Evalúa el perfil de inversión con los valores dados aplicando inferencia difusa.
-
-        El método realiza la validación de los parámetros de entrada, efectúa la inferencia
-        difusa sobre las reglas definidas, y determina el perfil del inversor basándose
-        en los valores defuzzificados de las variables de salida.
 
         Args:
             edad (int): Edad del inversor (20-100 años)
@@ -430,23 +343,13 @@ class SistemaExpertoDifusoInversorFCL:
             valor_riesgo = self.simulacion.output["riesgo"]
             valor_perfil = self.simulacion.output["perfil_inversor"]
 
-            # Interpretación lingüística del valor numérico del perfil (actualizada para 5 perfiles)
-            if valor_perfil <= 2.0:
-                perfil_texto = "Muy Conservador"  # Perfil extremadamente orientado a la seguridad y mínimo riesgo
-            elif valor_perfil <= 4.0:
-                perfil_texto = (
-                    "Conservador"  # Perfil orientado a la seguridad y bajo riesgo
-                )
-            elif valor_perfil <= 6.0:
-                perfil_texto = (
-                    "Moderado"  # Perfil equilibrado entre riesgo y rentabilidad
-                )
-            elif valor_perfil <= 8.0:
-                perfil_texto = (
-                    "Agresivo"  # Perfil orientado a altos rendimientos con mayor riesgo
-                )
+            # Interpretación lingüística del valor numérico del perfil y recomendaciones detalladas
+            if valor_perfil <= 3.33:
+                perfil_texto = "Conservador"
+            elif valor_perfil <= 6.66:
+                perfil_texto = "Moderado"
             else:
-                perfil_texto = "Muy Agresivo"  # Perfil extremadamente orientado a altos rendimientos con riesgo máximo
+                perfil_texto = "Agresivo"
 
             return {
                 "perfil": perfil_texto,
@@ -457,38 +360,19 @@ class SistemaExpertoDifusoInversorFCL:
 
         except Exception as e:
             print(
-                f"\nError en la evaluación del perfil mediante inferencia difusa: {e}"
+                f"\nError en la evaluación del perfil medionte inferencia difusa: {e}"
             )
-            # Implementación de sistema de respaldo basado en reglas heurísticas simplificadas
-            # para entregar resultados incluso en caso de fallo del sistema principal
+            # Sistema de respaldo basado en reglas heurísticas simplificadas
 
-            # Aplicación de heurísticas de clasificación actualizadas para 5 perfiles
-            if (
-                edad >= 70
-            ):  # Criterio de edad muy avanzada: predomina perfil muy conservador
-                perfil_defecto = "Muy Conservador"
-                valor_defecto = 1.5
-            elif (
-                edad >= 60 or ingresos < 1000
-            ):  # Criterio de edad avanzada/bajos ingresos: predomina perfil conservador
+            if edad >= 65 or ingresos < 2000:
                 perfil_defecto = "Conservador"
-                valor_defecto = 3.0
-            elif (edad >= 45 and edad < 60) or (ingresos >= 1000 and ingresos < 3000):
+                valor_defecto = 2.0
+            elif (edad >= 45 and edad < 65) or (ingresos >= 2000 and ingresos < 7000):
                 perfil_defecto = "Moderado"
                 valor_defecto = 5.0
-            elif (
-                tolerancia >= 8 and conocimiento >= 7
-            ):  # Alta tolerancia y conocimiento: perfil muy agresivo
-                perfil_defecto = "Muy Agresivo"
-                valor_defecto = 9.0
-            elif (
-                tolerancia >= 6 or conocimiento >= 6
-            ):  # Tolerancia o conocimiento alto: perfil agresivo
+            else:
                 perfil_defecto = "Agresivo"
-                valor_defecto = 7.0
-            else:  # Caso por defecto: perfil moderado
-                perfil_defecto = "Moderado"
-                valor_defecto = 5.0
+                valor_defecto = 8.0
 
             return {
                 "perfil": perfil_defecto,
