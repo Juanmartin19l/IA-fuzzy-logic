@@ -6,52 +6,52 @@ Este proyecto implementa un Sistema Experto basado en Lógica Difusa (Fuzzy Logi
 
 El sistema utiliza principios de lógica difusa para modelar el razonamiento humano en la clasificación de inversores. A diferencia de la lógica binaria tradicional (verdadero/falso), la lógica difusa permite el manejo de conceptos imprecisos como "joven", "ingresos altos" o "baja tolerancia al riesgo" mediante grados de pertenencia a conjuntos difusos.
 
-### Características principales
+## Estructura del Proyecto
 
-- Evaluación de perfiles de inversión basada en 4 variables de entrada
-- Categorización en 3 perfiles de inversor: Conservador, Moderado y Agresivo
-- Visualización de las funciones de membresía y resultados mediante gráficos
-- Interfaz de usuario por consola, interactiva y amigable
+El proyecto ha sido organizado de forma modular para facilitar su mantenimiento y comprensión:
 
-## Funcionamiento técnico
+- `main.py`: Punto de entrada principal del sistema. Contiene la función `ejecutar_sistema()` que gestiona la interacción con el usuario mediante una interfaz de consola.
+- `sistema_experto.py`: Contiene la implementación principal del sistema experto difuso (`SistemaExpertoDifusoInversorFCL`) con todas las variables, funciones de membresía y reglas de inferencia.
+- `visualizacion.py`: Módulo para la visualización de funciones de membresía y resultados de inferencia mediante gráficos.
+- `utils.py`: Funciones de utilidad generales para el sistema.
 
-### Variables de entrada
+## Variables de entrada
 
-1. **Edad del inversor (18-100 años)**:
+1. **Edad del inversor (20-100 años)**:
 
-   - Joven: 18-35 años (máxima pertenencia entre 18-27)
-   - Adulto: 30-55 años (máxima pertenencia en 42)
-   - Mayor: 50-100 años (máxima pertenencia a partir de 65)
+   - Joven: 20-40 años (pertenencia máxima entre 20-30)
+   - Medio: 35-55 años (pertenencia máxima alrededor de 45)
+   - Mayor: 50-100 años (pertenencia máxima a partir de 60)
 
 2. **Ingresos mensuales (0-15,000 unidades monetarias)**:
 
-   - Bajo: 0-2,000 (máxima pertenencia entre 0-1,000)
-   - Medio: 1,500-4,500 (máxima pertenencia en 3,000)
-   - Alto: 4,000-15,000 (máxima pertenencia a partir de 6,000)
+   - Bajo: 0-2,000 (pertenencia máxima entre 0-1,000)
+   - Medio: 1,500-4,500 (pertenencia máxima en 3,000)
+   - Alto: 4,000-15,000 (pertenencia máxima a partir de 5,000)
 
 3. **Conocimiento financiero (escala 0-10)**:
 
-   - Bajo: 0-4 (máxima pertenencia entre 0-2)
-   - Medio: 2-8 (máxima pertenencia entre 4-5)
-   - Alto: 6-10 (máxima pertenencia a partir de 8)
+   - Bajo: 0-4 (pertenencia máxima entre 0-2)
+   - Medio: 3-7 (pertenencia máxima en 5)
+   - Alto: 6-10 (pertenencia máxima a partir de 8)
 
 4. **Tolerancia al riesgo (escala 0-10)**:
-   - Baja: 0-4 (máxima pertenencia entre 0-2)
-   - Media: 2-8 (máxima pertenencia entre 4-5)
-   - Alta: 6-10 (máxima pertenencia a partir de 8)
+   - Baja: 0-4 (pertenencia máxima entre 0-2)
+   - Media: 3-7 (pertenencia máxima en 5)
+   - Alta: 6-10 (pertenencia máxima a partir de 8)
 
-### Variables intermedias
+## Variables intermedias
 
 1. **Potencial de inversión (escala 0-10)**:
 
    - Bajo: 0-4
-   - Medio: 3-8
-   - Alto: 7-10
+   - Medio: 3-7
+   - Alto: 6-10
 
 2. **Nivel de riesgo (escala 0-10)**:
    - Bajo: 0-4
-   - Medio: 3-8
-   - Alto: 7-10
+   - Medio: 3-7
+   - Alto: 6-10
 
 ### Variable de salida
 
