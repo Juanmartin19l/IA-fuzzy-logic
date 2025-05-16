@@ -323,62 +323,33 @@ class SistemaExpertoDifusoInversorFCL:
         if not (1 <= ingresos <= 15000):
             raise ValueError("Los ingresos deben estar entre 1 y 15,000")
         if not (1 <= conocimiento <= 10):
-            raise ValueError("El conocimiento debe estar entre 1 y 10")
+            raise ValueError("El conocimiento financiero debe estar entre 1 y 10")
         if not (1 <= tolerancia <= 10):
             raise ValueError("La tolerancia al riesgo debe estar entre 1 y 10")
 
         try:
-            # Preparación del sistema de inferencia
-            self.simulacion.reset()
-
-            # Fuzzificación: asignación de valores nítidos a las variables lingüísticas
+            # Asignar valores a las variables de entrada
             self.simulacion.input["edad"] = edad
             self.simulacion.input["ingresos"] = ingresos
             self.simulacion.input["conocimiento"] = conocimiento
             self.simulacion.input["tolerancia"] = tolerancia
 
-            # Proceso de inferencia difusa y defuzzificación
+            # Ejecutar el sistema de inferencia difusa
             self.simulacion.compute()
 
-            # Extracción de valores defuzzificados (nítidos) de las variables de salida
+            # Obtener resultados
             valor_potencial = self.simulacion.output["potencial"]
             valor_riesgo = self.simulacion.output["riesgo"]
             valor_perfil = self.simulacion.output["perfil_inversor"]
 
-            # Interpretación lingüística del valor numérico del perfil y recomendaciones detalladas
-            if valor_perfil <= 3.33:
-                perfil_texto = "Conservador"
-            elif valor_perfil <= 6.66:
-                perfil_texto = "Moderado"
-            else:
-                perfil_texto = "Agresivo"
-
-            return {
-                "perfil": perfil_texto,
+            # Preparar diccionario de resultados
+            resultados = {
                 "valor_perfil": valor_perfil,
                 "potencial": valor_potencial,
                 "riesgo": valor_riesgo,
             }
 
+            return resultados
+
         except Exception as e:
-            print(
-                f"\nError en la evaluación del perfil medionte inferencia difusa: {e}"
-            )
-            # Sistema de respaldo basado en reglas heurísticas simplificadas
-
-            if edad >= 65 or ingresos < 2000:
-                perfil_defecto = "Conservador"
-                valor_defecto = 2.0
-            elif (edad >= 45 and edad < 65) or (ingresos >= 2000 and ingresos < 7000):
-                perfil_defecto = "Moderado"
-                valor_defecto = 5.0
-            else:
-                perfil_defecto = "Agresivo"
-                valor_defecto = 8.0
-
-            return {
-                "perfil": perfil_defecto,
-                "valor_perfil": valor_defecto,
-                "potencial": 5.0,  # valor medio por defecto
-                "riesgo": 5.0,  # valor medio por defecto
-            }
+            raise Exception(f"Error en la evaluación del perfil: {str(e)}")

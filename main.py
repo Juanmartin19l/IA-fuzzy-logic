@@ -205,12 +205,6 @@ def ejecutar_sistema():
                 if ver_graficas.lower() in ["s", "si", "sí", "y", "yes"]:
                     visualizador.visualizar_variables(sed)
 
-                ver_resultado = input(
-                    "\n¿Desea ver la gráfica del proceso de inferencia? (s/n): "
-                )
-                if ver_resultado.lower() in ["s", "si", "sí", "y", "yes"]:
-                    visualizador.visualizar_resultado(sed)
-
                 print("\n" + "═" * 70)
 
             except ValueError as e:
@@ -229,7 +223,6 @@ def ejecutar_sistema():
         )
         print("╚" + "═" * 68 + "╝")
         print("\nDesarrollado con tecnología de Lógica Difusa (Fuzzy Logic)")
-        print("© Sistema Experto Profesional v2.0\n")
 
     except Exception as e:
         print(f"\n❌ ERROR FATAL EN EL SISTEMA: {str(e)}")
