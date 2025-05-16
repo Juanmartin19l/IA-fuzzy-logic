@@ -28,6 +28,8 @@ class SistemaExpertoDifusoInversorFCL:
         self.tolerancia = ctrl.Antecedent(np.arange(0, 11, 1), "tolerancia")
 
         # Definir variables de salida
+        # Por defecto, scikit-fuzzy utiliza el método de defuzzificación del centro de gravedad (centroid)
+        # Este método calcula el centro de masa del conjunto difuso resultante para obtener un valor nítido
         self.potencial = ctrl.Consequent(np.arange(0, 11, 0.1), "potencial")
         self.riesgo = ctrl.Consequent(np.arange(0, 11, 0.1), "riesgo")
         self.perfil_inversor = ctrl.Consequent(np.arange(0, 11, 0.1), "perfil_inversor")
@@ -95,8 +97,6 @@ class SistemaExpertoDifusoInversorFCL:
         self.riesgo["alto"] = fuzz.trapmf(self.riesgo.universe, [6, 8, 10, 10])
 
         # Funciones de membresía para variable PERFIL INVERSOR (escala 0-10)
-        # Utilizamos gaussianas para transiciones más suaves entre perfiles
-
         self.perfil_inversor["conservador"] = fuzz.trapmf(
             self.perfil_inversor.universe, [0, 0, 2.5, 4.5]
         )
