@@ -28,8 +28,9 @@ class SistemaExpertoDifusoInversorFCL:
         self.tolerancia = ctrl.Antecedent(np.arange(0, 11, 1), "tolerancia")
 
         # Definir variables de salida
-        # Por defecto, scikit-fuzzy utiliza el método de defuzzificación del centro de gravedad (centroid)
-        # Este método calcula el centro de masa del conjunto difuso resultante para obtener un valor nítido
+        # El método de defuzzificación por centro de gravedad (centroid) calcula la abscisa (valor x)
+        # del centro de masa del conjunto difuso resultante.
+        # Por defecto, scikit-fuzzy utiliza este método por ser preciso y consistente
         self.potencial = ctrl.Consequent(np.arange(0, 11, 0.1), "potencial")
         self.riesgo = ctrl.Consequent(np.arange(0, 11, 0.1), "riesgo")
         self.perfil_inversor = ctrl.Consequent(np.arange(0, 11, 0.1), "perfil_inversor")
