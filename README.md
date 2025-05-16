@@ -57,9 +57,9 @@ El proyecto ha sido organizado de forma modular para facilitar su mantenimiento 
 
 **Perfil de inversor (escala 0-10)**:
 
-- Conservador: 0-3.33
-- Moderado: 3.5-6.66
-- Agresivo: 6.66-10
+- Conservador
+- Moderado
+- Agresivo
 
 ## Modelo de inferencia difusa
 
@@ -198,19 +198,19 @@ El módulo de visualización (`visualizacion.py`) proporciona dos tipos principa
 
 ## Ejemplos de perfiles
 
-1. **Perfil Conservador** (0-3.33):
+1. **Perfil Conservador**
 
    - Personas mayores (>60 años) con ingresos bajos/medios
    - Personas con bajo potencial de inversión independientemente del riesgo
    - Recomendable para inversores que priorizan la seguridad sobre la rentabilidad
 
-2. **Perfil Moderado** (3.33-6.66):
+2. **Perfil Moderado**
 
    - Personas con potencial medio y riesgo bajo/medio
    - Adultos con ingresos medios y conocimiento financiero medio
    - Balance entre seguridad y rentabilidad
 
-3. **Perfil Agresivo** (6.66-10):
+3. **Perfil Agresivo**
    - Jóvenes con altos ingresos y alta tolerancia al riesgo
    - Personas con alto potencial de inversión y conocimiento financiero
    - Personas con potencial medio pero alto nivel de riesgo
